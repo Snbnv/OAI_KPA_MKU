@@ -9,27 +9,31 @@ class OaiMKU:
         self.client.disconnect()
         self.client.connect()
 
-        self.client.continuously_ao_flag = True
-        self.client.continuously_ai_flag = True
-        self.client.reverse_bytes_flag = True
+        # self.client.continuously_ao_flag = True
+        # self.client.continuously_ai_flag = True
+        # self.client.reverse_bytes_flag = True
 
-        self.client.ao_read_ranges = [[1228, 1245], [1059, 1063]]
+        # self.client.ao_read_ranges = [[1228, 1245], [1059, 1063]]
 
         self.client.write_regs(offset=1060, data_list=[0x1FE0, 0x0000, 0x0000, 0x0000])
 
         self.low_time = 0x86A0
         self.high_time = 0x0001
+        self.GPIO_alternative_set = 1228
+        self.GPIO1_12_alternative_set = 1242
+        self.GPIO13_28_alternative_set = 1242
 
-    def impact(self, low_time, high_time, gpio_num):
+    def impact(self, low_time, high_time, offset, gpio_num):
         """
         Set gpio to output for a specific amount of time
         :param low_time: set time     0x0000[0000]
         :param high_time: set time    0x[0000]0000
-        :param gpio_num: number gpio (1-12)
+        :param gpio_num: number gpio
         :return:
         """
-        self.client.write_regs(offset=1242, data_list=[gpio_num])
-        self.client.write_regs(offset=1228, data_list=[0x0001, 0x0001, 0x0000, 0x0000, 0x0000, low_time, high_time, 0x0000, 0x0000])
+        self.client.write_regs(offset=offset, data_list=[gpio_num])
+        self.client.write_regs(offset=self.GPIO_alternative_set,
+                               data_list=[0x0001, 0x0001, 0x0000, 0x0000, 0x0000, low_time, high_time, 0x0000, 0x0000])
 
     def on_gpio(self, offset, ao_register_map):
         """
@@ -55,7 +59,8 @@ class OaiMKU:
             на панели ТК вкл / в Ш2 ТК"Выкл. БДД"(-) 5,6 пин
         :return: 
         """
-        self.impact(low_time=self.low_time, high_time=self.high_time, gpio_num=0x0800)
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0800)
 
     def tk_off(self):
         """
@@ -63,7 +68,8 @@ class OaiMKU:
             на панели ТК откл / в Ш2 ТК"Выкл. БДД"(-) 7,8 пин
         :return:
         """
-        self.impact(low_time=self.low_time, high_time=self.high_time, gpio_num=0x0400)
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0400)
 
     def mrk_on(self):
         """
@@ -71,7 +77,8 @@ class OaiMKU:
             на панели МРК вкл / Ш2 МКУ"Вкл. БДД"(-) 9,10 пин
         :return:
         """
-        self.impact(low_time=self.low_time, high_time=self.high_time, gpio_num=0x0200)
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0200)
 
     def mrk_off(self):
         """
@@ -79,7 +86,8 @@ class OaiMKU:
             на панели МРК откл / Ш2 МКУ"Выкл. БДД"(-) 11,12 пин
         :return:
         """
-        self.impact(low_time=self.low_time, high_time=self.high_time, gpio_num=0x0100)
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0100)
 
     def pk2_on(self):
         """
@@ -87,7 +95,8 @@ class OaiMKU:
             на панели ПК2 вкл / Ш2 МКУ"Вкл. 2БДК"(-) 13,14 пин
         :return:
         """
-        self.impact(low_time=self.low_time, high_time=self.high_time, gpio_num=0x0080)
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0080)
 
     def pk1_on(self):
         """
@@ -95,7 +104,8 @@ class OaiMKU:
         на панели ПК1 вкл / Ш2 МКУ"Вкл. 1БДК"(-) 15,16 пин
         :return:
         """
-        self.impact(low_time=self.low_time, high_time=self.high_time, gpio_num=0x0040)
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0040)
 
     def pk_off(self):
         """
@@ -103,10 +113,44 @@ class OaiMKU:
         на панели ПК откл / Ш2 МКУ"Выкл. БДК"(-) 17,18 пин
         :return:
         """
-        self.impact(low_time=self.low_time, high_time=self.high_time, gpio_num=0x0020)
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0020)
 
     def gpio_8(self):
-        self.impact(low_time=self.low_time, high_time=self.high_time, gpio_num=0x0010)
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0010)
+
+    def gpio_9(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0008)
+
+    def gpio_10(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0004)
+
+    def gpio_11(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0002)
+
+    def gpio_12(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0001)
+
+    def gpio_13(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO13_28_alternative_set,
+                    gpio_num=0x8000)
+
+    def gpio_14(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO13_28_alternative_set,
+                    gpio_num=0x4000)
+
+    def gpio_15(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO13_28_alternative_set,
+                    gpio_num=0x2000)
+
+    def gpio_16(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO13_28_alternative_set,
+                    gpio_num=0x1000)
 
     def reconnect(self):
         self.client.disconnect()
@@ -114,14 +158,13 @@ class OaiMKU:
 
 
 if __name__ == '__main__':
-
     mku = OaiMKU()
     # mku.tk_on()
     # mku.tk_off()
     # mku.mrk_on()
     # mku.mrk_off()
-    # mku.pk1_on()
+    mku.pk1_on()
     # mku.pk2_on()
-    mku.pk_off()
+    # mku.pk_off()
 
     # mku.gpio_8()
