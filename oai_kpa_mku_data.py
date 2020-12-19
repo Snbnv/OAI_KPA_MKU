@@ -131,8 +131,8 @@ if __name__ == '__main__':
     # mku.tk_off()
     # mku.mrk_on()
     # mku.mrk_off()
-    mku.pk1_on()
+    # mku.pk1_on()
     # mku.pk2_on()
-    # mku.pk_off()
+    mku.pk_off()
 
     # mku.gpio_8()
