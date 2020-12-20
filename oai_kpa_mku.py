@@ -15,6 +15,7 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
         # обязательная часть для запуска виджета
         super().__init__()
         self.setupUi(self)
+
         # словарь настройки (здесь же обрабатывается параметры **kwargs)
         self.uniq_name = kwargs.get("uniq_name", 'oai_kpa_stm_un')
         self.core_cfg = {'serial_num': '20653699424D', 'widget': True}
@@ -22,12 +23,16 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
         self.default_cfg = {'core': self.core_cfg, 'user': self.user_cfg}
         self.loaded_cfg = self.load_cfg()
         self.cfg = self.cfg_process(self.loaded_cfg, kwargs)
+
         # отслеживание состояния окна
+
         self.state = 0
         # # Изменяемая часть окна # #
         self.moduleSerialNumberLEdit.setText(self.cfg["core"]["serial_num"])
+
         # Часть под правку: здесь вы инициализируете необходимые компоненты
         self.module = oai_kpa_mku_data.OaiMKU()
+
         # описываем элементы стандартного окна
         self.connectionPButton.clicked.connect(self.reconnect)
         self.pushButton_TK_On.clicked.connect(self.module.tk_on)
@@ -95,15 +100,6 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
         self.disconnect()
         self.connect()
         self.connection_state_check()
-        pass
-
-    @staticmethod
-    def __fill_single_socket(table, row, column, value, color=None):
-        table_item = QtWidgets.QTableWidgetItem("%.3f V" % value)
-        table_item.setTextAlignment(QtCore.Qt.AlignHCenter | QtCore.Qt.AlignVCenter)
-        if color:
-            table_item.setBackground(QtGui.QColor(color))
-        table.setItem(row, column, table_item)
         pass
 
     def save_cfg(self):
