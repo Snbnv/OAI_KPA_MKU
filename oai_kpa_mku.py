@@ -16,9 +16,8 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
         super().__init__()
         self.setupUi(self)
         # словарь настройки (здесь же обрабатывается параметры **kwargs)
-        self.uniq_name = kwargs.get("uniq_name", 'oai_kpa_stm_un')
-        self.core_cfg = {'serial_num': '20653699424D',
-                         'widget': True}
+        self.uniq_name = kwargs.get("uniq_name", 'oai_kpa_mku_un')
+        self.core_cfg = {'serial_num': '20653699424D', 'widget': True}
         self.user_cfg = {'example': 'xxx'}
         self.default_cfg = {'core': self.core_cfg,
                             'user': self.user_cfg
@@ -31,19 +30,16 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
         self.moduleSerialNumberLEdit.setText(self.cfg["core"]["serial_num"])
         # Часть под правку: здесь вы инициализируете необходимые компоненты
         self.module = oai_kpa_mku_data.OaiMKU(serial_num=self.cfg["core"]["serial_num"])
-        #
-        self.data_update_timer = QtCore.QTimer()
-        self.data_update_timer.timeout.connect(self.update_data)
-        self.data_update_timer.start(1000)
+
         # описываем элементы стандартного окна
         self.connectionPButton.clicked.connect(self.reconnect)
-        self.pushButton_TK_On.clicked(oai_kpa_mku_data.OaiMKU.tk_on(self))
-        self.pushButton_TK_Off.clicked(oai_kpa_mku_data.OaiMKU.tk_off(self))
-        self.pushButton_MRK_Off.clicked(oai_kpa_mku_data.OaiMKU.mrk_off(self))
-        self.pushButton_MRK_On.clicked(oai_kpa_mku_data.OaiMKU.mrk_on(self))
-        self.pushButton_PK1.clicked(oai_kpa_mku_data.OaiMKU.pk1_on(self))
-        self.pushButton_PK2.clicked(oai_kpa_mku_data.OaiMKU.pk2_on(self))
-        self.pushButton_PK_Off.clicked(oai_kpa_mku_data.OaiMKU.pk_off(self))
+        #self.pushButton_TK_On.clicked(self.module.tk_on())
+        #self.pushButton_TK_Off.clicked(self.module.tk_off())
+        #self.pushButton_MRK_Off.clicked(self.module.mrk_off())
+        #self.pushButton_MRK_On.clicked(self.module.mrk_on())
+        #self.pushButton_PK1.clicked(self.module.pk1_on())
+        #self.pushButton_PK2.clicked(self.module.pk2_on())
+        #self.pushButton_PK_Off.clicked(self.module.pk_off())
 
     @staticmethod
     def cfg_process(default_cfg, new_cfg):
@@ -150,4 +146,4 @@ if __name__ == '__main__':  # Если мы запускаем файл напр
     app = QtWidgets.QApplication(sys.argv)
     w = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='False')
     w.show()
-    sys.exit(app.exec_())
+    app.exec_()

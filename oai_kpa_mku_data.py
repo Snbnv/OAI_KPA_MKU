@@ -5,9 +5,10 @@ import oai_modbus
 
 class OaiMKU:
     def __init__(self, **kwargs):
-        self.client = oai_modbus.OAI_Modbus(serial_num=['20693699424D', '20653699424D'], debug=True)
-        self.client.disconnect()
-        self.client.connect()
+        self.serial_number = kwargs.get('serial_num', ['20693699424D', '20653699424D'])
+        self.client = oai_modbus.OAI_Modbus(serial_num=self.serial_number, debug=True)
+        #self.client.disconnect()
+        #self.client.connect()
 
         # self.client.continuously_ao_flag = True
         # self.client.continuously_ai_flag = True
@@ -120,19 +121,48 @@ class OaiMKU:
         self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
                     gpio_num=0x0010)
 
+    def connect(self, serial_num=None):
+        """
+        connection to the HW-module
+        connection parameter can be updated
+        :param serial_num: serial_number
+        :return: nothing
+        """
+        if serial_num:
+            self.serial_number = serial_num
+            self.client.serial_numbers.append(self.serial_number)
+        pass
+        if self.client.connect() == 1:
+            self.state = 1
+        else:
+            self.state = -1
+        return self.state
+
+    def disconnect(self):
+        try:
+            if self.client.disconnect() == 0:
+                self.state = 0
+            else:
+                self.state = -1
+        except AttributeError:
+            self.state = -1
+            pass
+        return self.state
+
     def reconnect(self):
-        self.client.disconnect()
-        self.client.connect()
+        self.disconnect()
+        self.connect()
 
 
 if __name__ == '__main__':
     mku = OaiMKU()
-    # mku.tk_on()
+    mku.connect()
+    mku.tk_on()
     # mku.tk_off()
     # mku.mrk_on()
     # mku.mrk_off()
     # mku.pk1_on()
     # mku.pk2_on()
-    mku.pk_off()
+    # mku.pk_off()
 
     # mku.gpio_8()
