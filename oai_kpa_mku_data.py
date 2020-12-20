@@ -7,8 +7,8 @@ class OaiMKU:
     def __init__(self, **kwargs):
         self.serial_number = kwargs.get('serial_num', ['20693699424D', '20653699424D'])
         self.client = oai_modbus.OAI_Modbus(serial_num=self.serial_number, debug=True)
-        #self.client.disconnect()
-        #self.client.connect()
+        self.client.disconnect()
+        self.client.connect()
 
         # self.client.continuously_ao_flag = True
         # self.client.continuously_ai_flag = True
@@ -156,7 +156,7 @@ class OaiMKU:
 
 if __name__ == '__main__':
     mku = OaiMKU()
-    mku.connect()
+    #mku.connect()
     mku.tk_on()
     # mku.tk_off()
     # mku.mrk_on()

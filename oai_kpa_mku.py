@@ -16,12 +16,10 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
         super().__init__()
         self.setupUi(self)
         # словарь настройки (здесь же обрабатывается параметры **kwargs)
-        self.uniq_name = kwargs.get("uniq_name", 'oai_kpa_mku_un')
+        self.uniq_name = kwargs.get("uniq_name", 'oai_kpa_stm_un')
         self.core_cfg = {'serial_num': '20653699424D', 'widget': True}
-        self.user_cfg = {'example': 'xxx'}
-        self.default_cfg = {'core': self.core_cfg,
-                            'user': self.user_cfg
-                            }
+        self.user_cfg = {'example': '20653699424D'}
+        self.default_cfg = {'core': self.core_cfg, 'user': self.user_cfg}
         self.loaded_cfg = self.load_cfg()
         self.cfg = self.cfg_process(self.loaded_cfg, kwargs)
         # отслеживание состояния окна
@@ -29,17 +27,16 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
         # # Изменяемая часть окна # #
         self.moduleSerialNumberLEdit.setText(self.cfg["core"]["serial_num"])
         # Часть под правку: здесь вы инициализируете необходимые компоненты
-        self.module = oai_kpa_mku_data.OaiMKU(serial_num=self.cfg["core"]["serial_num"])
-
+        self.module = oai_kpa_mku_data.OaiMKU()
         # описываем элементы стандартного окна
         self.connectionPButton.clicked.connect(self.reconnect)
-        #self.pushButton_TK_On.clicked(self.module.tk_on())
-        #self.pushButton_TK_Off.clicked(self.module.tk_off())
-        #self.pushButton_MRK_Off.clicked(self.module.mrk_off())
-        #self.pushButton_MRK_On.clicked(self.module.mrk_on())
-        #self.pushButton_PK1.clicked(self.module.pk1_on())
-        #self.pushButton_PK2.clicked(self.module.pk2_on())
-        #self.pushButton_PK_Off.clicked(self.module.pk_off())
+        self.pushButton_TK_On.clicked.connect(self.module.tk_on)
+        self.pushButton_TK_Off.clicked.connect(self.module.tk_off)
+        self.pushButton_MRK_Off.clicked.connect(self.module.mrk_off)
+        # self.pushButton_MRK_On.clicked(self.module.mrk_on())
+        # self.pushButton_PK1.clicked(self.module.pk1_on())
+        # self.pushButton_PK2.clicked(self.module.pk2_on())
+        # self.pushButton_PK_Off.clicked(self.module.pk_off())
 
     @staticmethod
     def cfg_process(default_cfg, new_cfg):
@@ -100,7 +97,6 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
         self.connection_state_check()
         pass
 
-
     @staticmethod
     def __fill_single_socket(table, row, column, value, color=None):
         table_item = QtWidgets.QTableWidgetItem("%.3f V" % value)
@@ -144,6 +140,13 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
 
 if __name__ == '__main__':  # Если мы запускаем файл напрямую, а не импортируем
     app = QtWidgets.QApplication(sys.argv)
-    w = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='False')
-    w.show()
-    app.exec_()
+    ui = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='True')
+    ui.show()
+    sys.exit(app.exec_())
+
+    #app = QtWidgets.QApplication(sys.argv)
+    #Form = QtWidgets.QWidget()
+    #ui = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='True')
+    #ui.setupUi(Form)
+    #Form.show()
+    #sys.exit(app.exec_())
