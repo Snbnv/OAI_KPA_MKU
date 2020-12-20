@@ -1,5 +1,4 @@
 import json
-
 from PyQt5 import QtWidgets, QtCore, QtGui
 import sys
 import time
@@ -9,7 +8,7 @@ import oai_kpa_mku_data
 import oai_kpa_mku_widget
 
 
-class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
+class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
     def __init__(self, *args, **kwargs):
         # # Стандартная часть окна # #
         # обязательная часть для запуска виджета
@@ -138,7 +137,7 @@ if __name__ == '__main__':  # Если мы запускаем файл напр
     app = QtWidgets.QApplication(sys.argv)
     ui = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='True')
     ui.show()
-    sys.exit(app.exec_())
+    app.exec_()
 
     #app = QtWidgets.QApplication(sys.argv)
     #Form = QtWidgets.QWidget()
