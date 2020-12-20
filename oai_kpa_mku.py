@@ -33,10 +33,10 @@ class ClientGUIWindow(QtWidgets.QMainWindow, oai_kpa_mku_widget.Ui_Form):
         self.pushButton_TK_On.clicked.connect(self.module.tk_on)
         self.pushButton_TK_Off.clicked.connect(self.module.tk_off)
         self.pushButton_MRK_Off.clicked.connect(self.module.mrk_off)
-        # self.pushButton_MRK_On.clicked(self.module.mrk_on())
-        # self.pushButton_PK1.clicked(self.module.pk1_on())
-        # self.pushButton_PK2.clicked(self.module.pk2_on())
-        # self.pushButton_PK_Off.clicked(self.module.pk_off())
+        self.pushButton_MRK_On.clicked.connect(self.module.mrk_on)
+        self.pushButton_PK1.clicked.connect(self.module.pk1_on)
+        self.pushButton_PK2.clicked.connect(self.module.pk2_on)
+        self.pushButton_PK_Off.clicked.connect(self.module.pk_off)
 
     @staticmethod
     def cfg_process(default_cfg, new_cfg):
