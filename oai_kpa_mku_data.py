@@ -10,10 +10,6 @@ class OaiMKU:
         self.client.disconnect()
         self.client.connect()
 
-        # self.client.continuously_ao_flag = True
-        # self.client.continuously_ai_flag = True
-        # self.client.reverse_bytes_flag = True
-
         self.client.ao_read_ranges = [[1228, 1245], [1059, 1063]]
 
         self.client.write_regs(offset=1060, data_list=[0x1FE0, 0x0000, 0x0000, 0x0000])
@@ -156,7 +152,7 @@ class OaiMKU:
 
 if __name__ == '__main__':
     mku = OaiMKU()
-    #mku.connect()
+    # mku.connect()
     mku.tk_on()
     # mku.tk_off()
     # mku.mrk_on()
