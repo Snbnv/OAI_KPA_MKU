@@ -17,8 +17,8 @@ class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
 
         # словарь настройки (здесь же обрабатывается параметры **kwargs)
         self.uniq_name = kwargs.get("uniq_name", 'oai_kpa_stm_un')
-        self.core_cfg = {'serial_num': '20653699424D', 'widget': True}
-        self.user_cfg = {'example': '20653699424D'}
+        self.core_cfg = {'serial_num': '20693699424D', 'widget': True}
+        self.user_cfg = {'example': 'xxx'}
         self.default_cfg = {'core': self.core_cfg, 'user': self.user_cfg}
         self.loaded_cfg = self.load_cfg()
         self.cfg = self.cfg_process(self.loaded_cfg, kwargs)
@@ -138,10 +138,3 @@ if __name__ == '__main__':  # Если мы запускаем файл напр
     ui = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='True')
     ui.show()
     app.exec_()
-
-    #app = QtWidgets.QApplication(sys.argv)
-    #Form = QtWidgets.QWidget()
-    #ui = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='True')
-    #ui.setupUi(Form)
-    #Form.show()
-    #sys.exit(app.exec_())
