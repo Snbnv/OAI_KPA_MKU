@@ -14,26 +14,35 @@ class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
         # обязательная часть для запуска виджета
         super().__init__()
         self.setupUi(self)
-
-        # словарь настройки (здесь же обрабатывается параметры **kwargs)
+        # создание и обработка словаря настройки (здесь же обрабатывается параметры **kwargs)
         self.uniq_name = kwargs.get("uniq_name", 'oai_kpa_stm_un')
-        self.core_cfg = {'serial_num': '20693699424D', 'widget': True}
-        self.user_cfg = {'example': 'xxx'}
-        self.default_cfg = {'core': self.core_cfg, 'user': self.user_cfg}
+        self.debug = kwargs.get('debug', False)
+        self.debug_print_flag = self.debug
+        # настройки по умолчанию
+        # настройки не для изменения (одинаковые для каждого типа плат)
+        self.core_cfg = {'serial_num': '20693699424D',
+                         'widget': True}
+        # настройки для вашего модуля (разные для каждого типа плат)
+        #self.user_cfg = {'example': 'xxx'}
+        self.default_cfg = {'core': self.core_cfg}
         self.loaded_cfg = self.load_cfg()
         self.cfg = self.cfg_process(self.loaded_cfg, kwargs)
+        # скрываем ненужные элементы
+        if self.cfg["core"]["widget"] is str(True):
+            self.connectionPButton.hide()
+        # описываем элементы стандартного окна
+        self.connectionPButton.clicked.connect(self.reconnect)
+        # переменные для создание лога
 
         # отслеживание состояния окна
-
         self.state = 0
         # # Изменяемая часть окна # #
         self.moduleSerialNumberLEdit.setText(self.cfg["core"]["serial_num"])
-
         # Часть под правку: здесь вы инициализируете необходимые компоненты
-        self.module = oai_kpa_mku_data.OaiMKU()
+        self.module = oai_kpa_mku_data.OaiMKU(serial_num=self.cfg["core"]["serial_num"], debug=self.debug_print_flag)
 
         # описываем элементы стандартного окна
-        self.connectionPButton.clicked.connect(self.reconnect)
+
         self.pushButton_TK_On.clicked.connect(self.module.tk_on)
         self.pushButton_TK_Off.clicked.connect(self.module.tk_off)
         self.pushButton_MRK_Off.clicked.connect(self.module.mrk_off)
@@ -107,8 +116,8 @@ class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
         except OSError as error:
             pass
         #
-        with open("cfg\\" + self.uniq_name + ".json", 'w') as cfg_file:
-            json.dump(self.cfg, cfg_file)
+        with open("cfg\\" + self.uniq_name + ".json", 'w', encoding="utf-8") as cfg_file:
+            json.dump(self.cfg, cfg_file, sort_keys=True, indent=4, ensure_ascii=False)
 
     def save_default_cfg(self):
         try:
@@ -116,25 +125,24 @@ class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
         except OSError as error:
             pass
         #
-        with open("cfg\\" + self.uniq_name + ".json", 'w') as cfg_file:
-            json.dump(self.default_cfg, cfg_file)
+        with open("cfg\\" + self.uniq_name + ".json", 'w', encoding="utf-8") as cfg_file:
+            json.dump(self.default_cfg, cfg_file, sort_keys=True, indent=4, ensure_ascii=False)
 
     def load_cfg(self):
-        loaded_cfg = {}
         try:
-            with open("cfg\\" + self.uniq_name + ".json", 'r') as cfg_file:
+            with open("cfg\\" + self.uniq_name + ".json", 'r', encoding="utf-8") as cfg_file:
                 loaded_cfg = json.load(cfg_file)
         except FileNotFoundError:
             loaded_cfg = self.default_cfg
         return loaded_cfg
 
     def closeEvent(self, event):
-        #
+        self.save_cfg()
         pass
 
 
 if __name__ == '__main__':  # Если мы запускаем файл напрямую, а не импортируем
     app = QtWidgets.QApplication(sys.argv)
-    ui = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='True')
+    ui = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='False', debug='True')
     ui.show()
     app.exec_()
