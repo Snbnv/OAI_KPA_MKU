@@ -1,0 +1,7 @@
+.idea
+cfg
+log
+dist
+tests
+poetry.lock
+__pycache__

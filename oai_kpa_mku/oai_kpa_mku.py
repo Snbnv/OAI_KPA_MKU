@@ -4,8 +4,8 @@ import sys
 import time
 import os
 import re
-import oai_kpa_mku_data
-import oai_kpa_mku_widget
+from . import oai_kpa_mku_data
+from . import oai_kpa_mku_widget
 
 
 class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
@@ -141,8 +141,3 @@ class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
         pass
 
 
-if __name__ == '__main__':  # Если мы запускаем файл напрямую, а не импортируем
-    app = QtWidgets.QApplication(sys.argv)
-    ui = ClientGUIWindow(uniq_name="oai_kpa_mku", widget='False', debug='True')
-    ui.show()
-    app.exec_()
