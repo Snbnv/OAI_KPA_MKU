@@ -3,33 +3,33 @@ import struct
 import oai_modbus
 
 
-class CfgParameter:
-    def __init__(self, **kwargs):
-        self.serial_number = kwargs.get('serial_num', '20693699424D')
-
-
 class OaiMKU:
     def __init__(self, **kwargs):
-        self.cfg = CfgParameter(serial_num="20693699424D")
-
         self.serial_number = kwargs.get('serial_num', '20693699424D')
-
         self.debug = kwargs.get('debug', False)
 
         self.client = oai_modbus.OAI_Modbus(serial_num=[self.serial_number])
+
         self.client.debug_print_flag = self.debug
 
         self.state = 0
 
-        self.low_time = 0x86A0
-        self.high_time = 0x0001
+        #self.low_time = 0x86A0
+        #self.high_time = 0x0001
+        self.dec = 100
+        self.set_time(dec=self.dec)
         self.GPIO_alternative_set = 1228
         self.GPIO1_12_alternative_set = 1242
         self.GPIO13_28_alternative_set = 1243
 
     def init(self):
         self.client.ao_read_ranges = [[1228, 1245], [1059, 1063]]
-        self.client.write_regs(offset=1060, data_list=[0x1FE0, 0x0000, 0x0000, 0x0000])
+        self.client.write_regs(offset=1060, data_list=[0x1FFF, 0xF000, 0x0000, 0x0000])
+
+    def set_time(self, dec):
+        tmp = (dec * 1000)
+        self.low_time = int(hex((tmp >> 0) & 0xFFFF), 16)
+        self.high_time = int(hex((tmp >> 16) & 0xFFFF), 16)
 
     def connect(self, serial_num=None):
         """
@@ -95,66 +95,31 @@ class OaiMKU:
         """
         self.client.write_regs(offset, [0x1000, 0x0000, 0x0000, 0x0000])
 
-    def tk_on(self):
-        """ 
-            gpio1
-            на панели ТК вкл / в Ш2 ТК"Выкл. БДД"(-) 5,6 пин
-        :return: 
-        """
+    def gpio_1(self):
         self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
                     gpio_num=0x0800)
 
-    def tk_off(self):
-        """
-            gpio2
-            на панели ТК откл / в Ш2 ТК"Выкл. БДД"(-) 7,8 пин
-        :return:
-        """
+    def gpio_2(self):
         self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
                     gpio_num=0x0400)
 
-    def mrk_on(self):
-        """
-            gpio3
-            на панели МРК вкл / Ш2 МКУ"Вкл. БДД"(-) 9,10 пин
-        :return:
-        """
+    def gpio_3(self):
         self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
                     gpio_num=0x0200)
 
-    def mrk_off(self):
-        """
-            gpio4
-            на панели МРК откл / Ш2 МКУ"Выкл. БДД"(-) 11,12 пин
-        :return:
-        """
+    def gpio_4(self):
         self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
                     gpio_num=0x0100)
 
-    def pk1_on(self):
-        """
-            gpio5
-            на панели ПК1 вкл / Ш2 МКУ"Вкл. 2БДК"(-) 13,14 пин
-        :return:
-        """
+    def gpio_5(self):
         self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
                     gpio_num=0x0080)
 
-    def pk2_on(self):
-        """
-            gpio6
-            на панели ПК2 вкл / Ш2 МКУ"Вкл. 1БДК"(-) 15,16 пин
-        :return:
-        """
+    def gpio_6(self):
         self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
                     gpio_num=0x0040)
 
-    def pk_off(self):
-        """
-            gpio7
-            на панели ПК откл / Ш2 МКУ"Выкл. БДК"(-) 17,18 пин
-        :return:
-        """
+    def gpio_7(self):
         self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
                     gpio_num=0x0020)
 
@@ -162,16 +127,44 @@ class OaiMKU:
         self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
                     gpio_num=0x0010)
 
+    def gpio_9(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0008)
+
+    def gpio_10(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0004)
+
+    def gpio_11(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0002)
+
+    def gpio_12(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO1_12_alternative_set,
+                    gpio_num=0x0001)
+
+    def gpio_13(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO13_28_alternative_set,
+                    gpio_num=0x8000)
+
+    def gpio_14(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO13_28_alternative_set,
+                    gpio_num=0x4000)
+
+    def gpio_15(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO13_28_alternative_set,
+                    gpio_num=0x2000)
+
+    def gpio_16(self):
+        self.impact(low_time=self.low_time, high_time=self.high_time, offset=self.GPIO13_28_alternative_set,
+                    gpio_num=0x1000)
+
 
 if __name__ == '__main__':
     mku = OaiMKU(serial_num="20693699424D", debug=True)
     mku.connect()
-    mku.tk_on()
-    # mku.tk_off()
-    # mku.mrk_on()
-    # mku.mrk_off()
-    # mku.pk1_on()
-    # mku.pk2_on()
-    # mku.pk_off()
+    mku.set_time(dec=100)
+    print(hex(mku.low_time))
+    print(hex(mku.high_time))
 
-    # mku.gpio_8()
+    mku.gpio_1()
