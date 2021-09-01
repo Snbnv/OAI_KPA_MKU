@@ -4,8 +4,12 @@ import sys
 import time
 import os
 import re
-from . import oai_kpa_mku_data
-from . import oai_kpa_mku_widget
+try:
+    from . import oai_kpa_mku_data
+    from . import oai_kpa_mku_widget
+except Exception as ex:
+    import oai_kpa_mku_data
+    import oai_kpa_mku_widget
 
 
 class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
@@ -64,9 +68,12 @@ class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
             for c_key, c_value in default_cfg["core"].items():
                 if c_key == key:
                     cfg["core"][key] = value
-            for c_key, c_value in default_cfg["user"].items():
-                if c_key == key:
-                    cfg["user"][key] = value
+            try:
+                for c_key, c_value in default_cfg["user"].items():
+                    if c_key == key:
+                        cfg["user"][key] = value
+            except Exception as ex:
+                pass
         return cfg
 
     def connection_state_check(self):
