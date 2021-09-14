@@ -1,43 +1,43 @@
 {
     "core": {
-        "serial_num": "20693699424D",
+        "serial_num": "20683699424D",
         "widget": "False"
     },
     "user": {
         "KU01": {
-            "name": "ТК вкл",
+            "name": "ПК1",
             "state": 1,
-            "tooltip": "<html><head/><body><p>Включить ТК</p></body></html>"
+            "tooltip": "<html><head/><body><p>Задействовать 1й полукоиплект</p></body></html>"
         },
         "KU02": {
-            "name": "ТК откл",
-            "state": 1,
-            "tooltip": "<html><head/><body><p>Отключить ТК</p></body></html>"
-        },
-        "KU03": {
-            "name": "МРК вкл",
-            "state": 1,
-            "tooltip": "<html><head/><body><p>Включить МРК</p></body></html>"
-        },
-        "KU04": {
-            "name": "МРК откл",
-            "state": 1,
-            "tooltip": "<html><head/><body><p>Отключить МРК</p></body></html>"
-        },
-        "KU05": {
-            "name": "ПК1 вкл",
-            "state": 1,
-            "tooltip": "<html><head/><body><p>Задействовать 1й полукомплект</p></body></html>"
-        },
-        "KU06": {
-            "name": "ПК2 вкл",
-            "state": 1,
-            "tooltip": "<html><head/><body><p>Задействовать 2й полукомплект</p></body></html>"
-        },
-        "KU07": {
             "name": "Откл",
             "state": 1,
             "tooltip": "<html><head/><body><p>Отключить БЭ</p></body></html>"
+        },
+        "KU03": {
+            "name": "ПК2",
+            "state": 1,
+            "tooltip": "<html><head/><body><p>Задействовать 2й полукоиплект</p></body></html>"
+        },
+        "KU04": {
+            "name": "",
+            "state": 0,
+            "tooltip": ""
+        },
+        "KU05": {
+            "name": "К1",
+            "state": 1,
+            "tooltip": "<html><head/><body><p> </p></body></html>"
+        },
+        "KU06": {
+            "name": "",
+            "state": 0,
+            "tooltip": ""
+        },
+        "KU07": {
+            "name": "К2",
+            "state": 1,
+            "tooltip": "<html><head/><body><p> </p></body></html>"
         },
         "KU08": {
             "name": "",

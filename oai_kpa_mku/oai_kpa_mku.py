@@ -201,24 +201,24 @@ class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
 
     def save_cfg(self):
         try:
-            os.mkdir("cfg")
+            os.mkdir(os.path.dirname(__file__) + "\\cfg")
         except OSError as error:
             pass
         #
-        with open("cfg\\" + self.uniq_name + ".json", 'w', encoding="utf-8") as cfg_file:
+        with open(os.path.dirname(__file__) + "\\cfg\\" + self.uniq_name + ".json", 'w', encoding="utf-8") as cfg_file:
             json.dump(self.cfg, cfg_file, sort_keys=True, indent=4, ensure_ascii=False)
 
     def save_default_cfg(self):
         try:
-            os.mkdir("cfg")
+            os.mkdir(os.path.dirname(__file__) + "\\cfg")
         except OSError as error:
             pass
-        with open("cfg\\" + self.uniq_name + ".json", 'w', encoding="utf-8") as cfg_file:
+        with open(os.path.dirname(__file__) + "\\cfg\\" + self.uniq_name + ".json", 'w', encoding="utf-8") as cfg_file:
             json.dump(self.default_cfg, cfg_file, sort_keys=True, indent=4, ensure_ascii=False)
 
     def load_cfg(self):
         try:
-            with open("cfg\\" + self.uniq_name + ".json", 'r', encoding="utf-8") as cfg_file:
+            with open(os.path.dirname(__file__) + "\\cfg\\" + self.uniq_name + ".json", 'r', encoding="utf-8") as cfg_file:
                 loaded_cfg = json.load(cfg_file)
         except FileNotFoundError:
             loaded_cfg = self.default_cfg
@@ -236,7 +236,7 @@ class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):
         :param extension: the file-name extension ("%Y_%m_%d %H-%M-%S <prefix> <extension>)
         :return: lof_file handle
         """
-        sub_dir_name = dir_name + "\\" + time.strftime("%Y_%m_%d", time.localtime()) + " " + sub_dir
+        sub_dir_name = os.path.dirname(__file__) + '\\' + dir_name + "\\" + time.strftime("%Y_%m_%d", time.localtime()) + " " + sub_dir
         if sub_sub_dir:
             sub_sub_dir_name = sub_dir_name + "\\" + time.strftime("%Y_%m_%d %H-%M-%S ",
                                                                    time.localtime()) + sub_dir
