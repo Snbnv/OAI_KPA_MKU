@@ -4,8 +4,12 @@ import sys
 import time
 import os
 import re
-import oai_kpa_mku_data
-import oai_kpa_mku_widget
+try:
+    from . import oai_kpa_mku_data
+    from . import oai_kpa_mku_widget
+except Exception as ex:
+    import oai_kpa_mku_data
+    import oai_kpa_mku_widget
 
 
 class ClientGUIWindow(QtWidgets.QWidget, oai_kpa_mku_widget.Ui_Form):

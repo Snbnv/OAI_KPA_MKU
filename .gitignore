@@ -1,3 +1,10 @@
 /log/
 /dist/
 /cfg/
+.idea
+__pychache__
+log
+oai_kpa_mku/__pychache__
+oai_kpa_mku/log
+dist
+venv
