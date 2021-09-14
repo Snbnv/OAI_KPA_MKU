@@ -2,9 +2,9 @@
 /dist/
 /cfg/
 .idea
-__pychache__
+__pycache__
 log
-oai_kpa_mku/__pychache__
+oai_kpa_mku/__pycache__
 oai_kpa_mku/log
 dist
 venv
